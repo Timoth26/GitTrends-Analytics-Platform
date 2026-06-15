@@ -70,17 +70,66 @@ resource "aws_iam_access_key" "databricks_user_key" {
 }
 
 output "s3_bucket_name" {
-  description = "Nazwa utworzonego bucketa S3"
+  description = "S3 bucket's name"
   value       = aws_s3_bucket.data_lake.bucket
 }
 
 output "iam_access_key_id" {
-  description = "AWS Access Key ID dla Databricks"
+  description = "AWS Access Key ID for Databricks"
   value       = aws_iam_access_key.databricks_user_key.id
 }
 
 output "iam_secret_access_key" {
-  description = "AWS Secret Access Key dla Databricks"
+  description = "AWS Secret Access Key for Databricks"
   value       = aws_iam_access_key.databricks_user_key.secret
   sensitive   = true
+}
+
+# Potential changes in the AWS Console following the Databricks permissions update
+resource "aws_iam_role" "s3_read_only_role" {
+  name = "s3-read-only-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "databricks.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "s3_read_only_policy" {
+  name = "s3-read-only-policy"
+  role = aws_iam_role.s3_read_only_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket",
+          "s3:GetBucketLocation"
+        ]
+        Resource = ["arn:aws:s3:::gittrends-data-lake"]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject"
+        ]
+        Resource = ["arn:aws:s3:::gittrends-data-lake/*"]
+      }
+    ]
+  })
+}
+
+output "s3_read_only_role_arn" {
+  description = "ARN of the S3 read-only IAM role for Databricks"
+  value       = aws_iam_role.s3_read_only_role.arn
 }
