@@ -270,3 +270,5 @@ airflow.cfg
 unittests.cfg
 airflow.db
 logs/
+
+.DS_Store
