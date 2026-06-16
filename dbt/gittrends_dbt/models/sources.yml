@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: silver_layer
+    database: awsdatacatalog
+    schema: gittrends_silver_db
+    tables:
+      - name: github_events
