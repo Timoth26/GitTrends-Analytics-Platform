@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: dim_repositories
+    description: "Dimension table containing unique GitHub repositories."
+    columns:
+      - name: repo_name
+        description: "Repository name."
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_users
+    description: "Dimension table containing GitHub user profiles."
+    columns:
+      - name: username
+        description: "GitHub username."
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_daily_commits
+    description: "Fact table containing daily commit counts for each repository and user."
+    columns:
+      - name: repo_name
+        tests:
+          - not_null
+      - name: author
+        tests:
+          - not_null
+      - name: total_commits
+        description: "Daily total commits for the repository and author."
+        tests:
+          - not_null
