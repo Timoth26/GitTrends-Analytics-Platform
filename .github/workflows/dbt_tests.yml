@@ -22,7 +22,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install dbt and dependencies
-        run: make install
+        run: make install-dbt
 
       - name: Configuration of AWS credentials
         uses: aws-actions/configure-aws-credentials@v4

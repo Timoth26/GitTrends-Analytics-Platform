@@ -1,4 +1,4 @@
-.PHONY: install airflow-up airflow-down airflow-restart dbt-run dbt-debug dbt-test install
+.PHONY: install airflow-up airflow-down airflow-restart dbt-run dbt-debug dbt-test upgrade-pip install-dbt install-pyspark
 
 airflow-up:
 	docker compose -f ./airflow/docker-compose.yml up -d
@@ -21,6 +21,16 @@ dbt-test:
 terraform-apply:
 	cd ./terraform && terraform apply
 
-install:
-	pip install --upgrade pip
+upgrade-pip:
+	python -m pip install --upgrade pip
+
+install-dbt: upgrade-pip
 	pip install dbt-core dbt-athena-community
+
+install-pyspark: upgrade-pip
+	pip install -e . pytest pyspark
+
+install-all: install-dbt install-pyspark
+
+run-tests:
+	PYTHONPATH=src pytest tests/ -v
