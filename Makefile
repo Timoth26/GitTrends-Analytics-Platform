@@ -16,7 +16,10 @@ dbt-debug:
 	cd ./dbt/gittrends_dbt && dbt debug
 
 dbt-test:
-	cd ./dbt/gittrends_dbt && dbt test
+	cd ./dbt/gittrends_dbt && dbt test --select test_type:generic
+	
+dbt-tests-singular:
+	cd ./dbt/gittrends_dbt && dbt test --select test_type:singular
 
 terraform-apply:
 	cd ./terraform && terraform apply
