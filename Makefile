@@ -31,7 +31,7 @@ install-dbt: upgrade-pip
 	pip install dbt-core dbt-athena-community
 
 install-pyspark: upgrade-pip
-	pip install -e . pytest pyspark
+	pip install -e . pytest pyspark dotenv
 
 install-all: install-dbt install-pyspark
 
