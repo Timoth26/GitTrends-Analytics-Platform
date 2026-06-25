@@ -1,4 +1,4 @@
-# GitTrends: End-to-End Data Engineering Pipeline
+# GitTrends Data Pipeline
 
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/) [![Apache Airflow](https://img.shields.io/badge/Airflow-3.2.1-017CEE?logo=Apache%20Airflow)](https://airflow.apache.org/) [![Databricks](https://img.shields.io/badge/Databricks-Lakehouse-FF3621?logo=databricks&logoColor=white)](https://www.databricks.com/) [![dbt](https://img.shields.io/badge/dbt-Athena-FF694B?logo=dbt)](https://www.getdbt.com/) [![AWS](https://img.shields.io/badge/AWS-Cloud_Platform-232F3E?logo=amazon-aws&logoColor=white)](https://aws.amazon.com/) [![AWS S3](https://img.shields.io/badge/AWS_S3-Data_Lake-569A31?logo=amazons3&logoColor=white)](https://aws.amazon.com/s3/) [![Terraform](https://img.shields.io/badge/Terraform-IaC-7B42BC?logo=terraform)](https://www.terraform.io/) [![CI/CD](https://img.shields.io/badge/GitHub_Actions-CI%2FCD-2088FF?logo=github-actions)](https://github.com/features/actions)
 
@@ -70,8 +70,7 @@ Provision the required AWS S3 buckets and Athena databases:
 ```bash
 cd terraform
 terraform init
-terraform apply
-
+make terraform-apply
 ```
 
 ### 3. Running the Pipeline
@@ -79,9 +78,7 @@ terraform apply
 Start the Airflow orchestrator:
 
 ```bash
-cd airflow
-docker-compose up -d
-
+make airflow-up
 ```
 
 Access the Airflow UI at `http://localhost:8080` to trigger the `gharchive_ingestion` DAG.
@@ -102,7 +99,7 @@ make test-spark
 Validate the Gold layer against schema assertions and custom business logic (Singular Tests):
 
 ```bash
-dbt test --project-dir ./dbt/gittrends_dbt
+make dbt-tests-singular
 
 ```
 
