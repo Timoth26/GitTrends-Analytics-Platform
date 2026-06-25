@@ -1,7 +1,13 @@
 # Databricks notebook source
+import os
+
+from dotenv import load_dotenv
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col, explode_outer, lit, to_timestamp
 from pyspark.sql.types import StructType
+
+load_dotenv()
+BUCKET_NAME = os.getenv("BUCKET_NAME")
 
 
 def clean_and_flatten_data(df_bronze: DataFrame) -> DataFrame:
@@ -48,7 +54,7 @@ def clean_and_flatten_data(df_bronze: DataFrame) -> DataFrame:
 def main():
     spark = SparkSession.builder.appName("GitHubArchive-BronzeToSilver").getOrCreate()
 
-    BUCKET_NAME = "gittrends-data-lake"
+    BUCKET_NAME = "BUCKET_NAME"
     BRONZE_PATH = f"s3://{BUCKET_NAME}/bronze/*/*/*/*.json.gz"
     SILVER_PATH = f"s3://{BUCKET_NAME}/silver/github_events/"
 
